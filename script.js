@@ -1,67 +1,127 @@
-//  ['Rock', 'Paper', 'Scissors']
-var userTotal = 1
-var computerTotal = 1
-var choiceOne = document.getElementById('rps-image1')
-var choiceTwo = document.getElementById('rps-image2')
-var choiceThree = document.getElementById('rps-image3')
-
-
-choiceOne.addEventListener('click', function() {
-
-    var computerChoice = Math.floor(Math.random() * 3 + 1)
-    var choice = 1
-    if (computerChoice === choice) {
-        document.getElementById('user-result').innerHTML = 'Rock'
-        document.getElementById('computer-result').innerHTML = 'Rock'
-        document.getElementById('result').innerHTML = 'Draw!'
-    } else if (computerChoice === choice + 1) {
-        document.getElementById('user-result').innerHTML = 'Rock'
-        document.getElementById('computer-result').innerHTML = 'Scissors'
-        document.getElementById('result').innerHTML = 'You Win!'
-        document.getElementById('scores-user').innerHTML = userTotal++
-    } else {
-        document.getElementById('user-result').innerHTML = 'Rock'
-        document.getElementById('computer-result').innerHTML = 'Paper'
-        document.getElementById('result').innerHTML = 'You lose!'
-        document.getElementById('scores-comp').innerHTML = computerTotal++
+$(document).ready( function() {
+    var initGame = false
+    var userScore = 0
+    var compScore = 0
+    var scissors = $('#rps-image3')
+    var paper = $('#rps-image2')
+    var rock = $('#rps-image1')
+    
+    
+    if (initGame == true) {
+        displayGame()
+    } 
+    
+    function init() {
+        $('.game').hide()
+        $('#title2').hide()
+        $('#who-wins').hide()
     }
-})
-choiceTwo.addEventListener('click', function() {
-    var computerChoice = Math.floor(Math.random() * 3 + 1)
-    var choice = 2
-    if (computerChoice === choice) {
-        document.getElementById('user-result').innerHTML = 'Paper'
-        document.getElementById('computer-result').innerHTML = 'Paper'
-        document.getElementById('result').innerHTML = 'Draw!'
-    } else if (computerChoice === choice - 1) {
-        document.getElementById('user-result').innerHTML = 'Paper'
-        document.getElementById('computer-result').innerHTML = 'Rock'
-        document.getElementById('result').innerHTML = 'You Win!'
-        document.getElementById('scores-user').innerHTML = userTotal++
-    } else {
-        document.getElementById('user-result').innerHTML = 'Paper'
-        document.getElementById('computer-result').innerHTML = 'Scissors'
-        document.getElementById('result').innerHTML = 'You lose!'
-        document.getElementById('scores-comp').innerHTML = computerTotal++
-    }
-})
-choiceThree.addEventListener('click', function() {
-    var computerChoice = Math.floor(Math.random() * 3 + 1)
-    var choice = 3
-    if (computerChoice === choice) {
-        document.getElementById('user-result').innerHTML = 'Scissors'
-        document.getElementById('computer-result').innerHTML = 'Scissors'
-        document.getElementById('result').innerHTML = 'Draw!'
-    } else if (computerChoice === choice - 1) {
-        document.getElementById('user-result').innerHTML = 'Scissors'
-        document.getElementById('computer-result').innerHTML = 'Paper'
-        document.getElementById('result').innerHTML = 'You Win!'
-        document.getElementById('scores-user').innerHTML = userTotal++
-    } else {
-        document.getElementById('user-result').innerHTML = 'Scissors'
-        document.getElementById('computer-result').innerHTML = 'Rock'
-        document.getElementById('result').innerHTML = 'You lose!'
-        document.getElementById('scores-comp').innerHTML = computerTotal++
-    }
-})
+    init()
+    
+    $('.start-btn').on('click', function() {
+        initGame = true
+        $('.init').hide()
+        $('.game').show()
+        $('#walkthrough').text('Click a floating hand to select your choice!')
+        playGame()
+    })
+    
+    
+    function playGame() {
+        rockChoice = 1
+        paperChoice = 2
+        scissorsChoice = 3
+        $('#rps-image1').on('click', function() {
+            var compMath = Math.floor(Math.random() * 3 + 1)
+            if (compMath == 1) {
 
+                // User ties
+                $('#who-wins').text('Tie!')
+                updateDisplay()
+            }
+            else if (compMath == 2) {
+                // user loses
+                $('#who-wins').text('Loser!')
+                compScore++
+                updateDisplay()
+            }
+            else {
+                console.log('win')
+                // user wins
+                $('#who-wins').text('Winner!')
+                userScore++
+                updateDisplay() 
+            }
+        })
+        
+        $('#rps-image2').on('click', function() {
+            var compMath = Math.floor(Math.random() * 3 + 1)
+            if (compMath == 2) {
+                // user ties
+                $('#who-wins').text('Tie!')
+                updateDisplay()
+            }
+            else if (compMath == 3) {
+                // user loses
+                $('#who-wins').text('Loser!')
+                compScore++
+                updateDisplay()
+            }
+            else {
+                // user wins
+                $('#who-wins').text('Winner!')
+                userScore++
+                updateDisplay()
+            }
+        })
+        
+        $('#rps-image3').on('click', function() {
+            var compMath = Math.floor(Math.random() * 3 + 1)
+            if (compMath == 3) {
+                // user ties
+                $('#who-wins').text('Tie!')
+                updateDisplay()
+            } else if (compMath == 1){
+                // user loses
+                $('#who-wins').text('Loser!')
+                compScore++
+                updateDisplay()
+            } else {
+                // user wins
+                $('#who-wins').text('Winner!')
+                userScore++
+                updateDisplay()
+            }
+        })
+    }
+    
+    function updateDisplay() {
+        $('#walkthrough').css({
+            display: 'none'
+        })
+        $('#title2').show()
+        scissors.hide(2000)
+        paper.hide(2000)
+        rock.show(2000)
+        paper.show(2000)
+        scissors.show(3000)
+        shoot()
+    }
+    
+    function shoot() {
+        setInterval( function() {
+            $('#title2').css({
+                display: 'none'
+            })
+            $('#shoot').text('. . .Shoot!')
+        }, 8000)
+        displayResult()
+    }
+    
+    function displayResult() {
+        $('#comp-results').text('Computer: ' + compScore)
+        $('#user-results').text('User: ' + userScore)
+        $('#who-wins').show()
+    }
+
+})
